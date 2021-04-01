@@ -1,0 +1,78 @@
+---
+title: "互動式經濟資料視覺化"
+output: output_format
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(drake)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+# Paste your drake Rdata loading here #在hypothesis 的註記裡面
+xfun::download_file("https://www.dropbox.com/s/awx8datq45kgpzq/overview_drake.Rdata?dl=1")
+load("overview_drake.Rdata")
+```
+
+
+```{r}
+.root <- rprojroot::is_rstudio_project$make_fix_file()
+drake$.updateCache() #更換暫存區位置
+drake$source_plan()
+drake$makePlan()
+```
+#drake 用法解說
+load target
+```{r}
+drake$loadTarget$pltWithoutI()
+pltWithoutI
+```
+
+see original code
+```{r}
+drake$clipCommand$pltWithoutI() # store in your clipboard after running this command
+```
+
+paste in the place you want to see the code
+
+```{r}
+formula1 <- ~x+y
+model.matrix(formula1, data=diamonds)
+```
+
+Formula class : ~
+#no intercept
+```{r}
+formula0 <-  ~ 0 + x + y
+model.matrix(formula0, data=diamonds)
+```
+
+#I = as is 
+```{r}
+formulaInt2 <- ~ I(x*y)
+model.matrix(formulaInt2, data=diamonds)
+```
+
+```{r}
+model.frame(~I(x+2*z), data = diamonds) #取代mutate
+```
+```{r}
+formulaInt1 <- ~ x*y
+model.matrix(formulaInt1, data=diamonds)
+```
+
+
+```{r}
+# produces red bars with black outline
+plot_ly(
+  diamonds,  #formula mapping 的概念與直接取值不同
+  x = ~cut, #直接map到diamonds，所以就不用specify data
+  color = I("red"), 
+  stroke = I("black"), 
+  span = I(2)
+)
+```
+

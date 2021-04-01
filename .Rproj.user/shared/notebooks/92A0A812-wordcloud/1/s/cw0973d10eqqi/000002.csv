@@ -1,0 +1,2 @@
+"0","par(family=(""NSerifC""))"
+"0","wordcloud(txt_freq$char,txt_freq$freq, min.freq = 17,random.order = F, ordered.colors = F)"

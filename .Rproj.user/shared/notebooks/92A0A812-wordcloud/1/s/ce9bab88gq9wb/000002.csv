@@ -1,0 +1,22 @@
+"0","library(readr)"
+"0","linetext <- read_csv(""~/Downloads/[LINE] 與榮的聊天.txt"")"
+"2","
+[36m─[39m [1m[1mColumn specification[1m[22m [36m───────────────────────────────────[39m
+cols(
+  `[LINE] 與榮的聊天記錄` = [31mcol_character()[39m
+)
+
+"
+"0","grepl(""\t"", linetext[[1]], fixed = TRUE) -> tabLogi"
+"0","linetext[[1]][tabLogi] -> LogiOut"
+"0","str_split(LogiOut,""\t"") -> splitWords"
+"0","list() -> wordsOnly"
+"0",""
+"0",""
+"0","for (i in seq_along(splitWords)){"
+"0","  if (splitWords[[i]][[2]] == ""IHsunChiou""){"
+"0","  splitWords[[i]][3] -> wordsOnly[[i]] "
+"0","    } #[3]instead of [[3]]"
+"0","}"
+"0",""
+"0","wordsOnly[-which(sapply(wordsOnly, is.null))] -> wordsOnly #清除null  "

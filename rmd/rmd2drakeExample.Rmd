@@ -1,0 +1,57 @@
+---
+drake_cache: ".rmd2drake"
+---
+
+## Example of Rmd structure
+
+```{r makecondition}
+library(htmltools)
+library(drake)
+```
+
+
+R code:
+
+```{r tag_h1}
+tag_h1 <- tags$h3("My First Heading Update")
+```
+
+
+```{r tag_p}
+tags$p(" My first paragraph.")
+```
+
+<div class ='alert alert-info'>
+Micro-management at any tag element becomes possible under **htmltools**.
+</div>
+
+```{r all_body}
+all_body <- 
+  tagList(
+    tag_h1,
+    tag_p
+  )
+```
+
+```{r myHTML}
+tags$html( 
+  tags$head( 
+    tags$title(" Page Title")
+  ),
+tags$body(all_body)
+) -> myHTML
+```
+
+## manage drake instance
+
+```{r}
+drake$source_plan()
+drake$makePlan()
+```
+
+
+```{r}
+drake$loadTarget$myHTML()
+save_html(myHTML, file = "rmd2drakeExample.html")
+```
+

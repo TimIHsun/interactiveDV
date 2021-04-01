@@ -1,0 +1,5 @@
+"0","wordsOnly[[1]] -> passage "
+"0","for (i in 2:length(wordsOnly)){"
+"0","  paste(passage,wordsOnly[[i]],sep="""") -> passage"
+"0","}"
+"0",""

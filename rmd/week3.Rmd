@@ -1,0 +1,171 @@
+---
+title: "互動式經濟資料視覺化"
+output: output_format
+---
+
+\#map
+
+1.  get BBox getbb
+2.  open query opq 3.add feature
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(sf)
+# Paste your drake Rdata loading here
+xfun::download_file("https://www.dropbox.com/s/t2kqcma39cfqvk4/maps_drake.Rdata?dl=1", mode="wb")
+load("maps_drake.Rdata.Rdata")
+```
+
+```{r}
+.root <- rprojroot::is_rstudio_project$make_fix_file()
+drake$.updateCache()
+drake$source_plan()
+drake$makePlan()
+```
+
+load target
+
+```{r}
+drake$loadTarget$pltWithoutI()
+pltWithoutI
+```
+
+see original code
+
+```{r}
+drake$clipCommand$pltWithoutI() # store in your clipboard after running this command
+```
+
+paste in the place you want to see the code
+
+##getBBox
+
+```{r}
+library(osmdata)
+getbb("Sanxia District") -> bbSanxia
+getbb("Taipei") -> bbTaipei
+
+bbSanxia 
+```
+
+##open query
+
+```{r}
+bboxSanxia = c(121.3175, 24.79004, 121.49723, 24.95214)
+
+bbSanxia %>% opq()
+bbTaipei %>% opq() -> opqtpe
+```
+
+##feature
+
+```{r}
+opqtpe %>% add_osm_feature(
+  key = "admin_level",
+  value = "5"
+) -> opqtpe_admin
+```
+
+```{r}
+opqtpe %>% add_osm_feature(
+  key = "amenity",
+  value = "place_of_worship"
+) -> opqtpe_worship
+```
+
+##sf
+```{r}
+?osmdata::osmdata_sf()
+```
+
+```{r}
+opqtpe_admin %>% osmdata::osmdata_sf() -> sf_tpe_boundaries
+opqtpe_worship %>% osmdata::osmdata_sf() -> sf_tpe_worship
+```
+
+```{r}
+sf_tpe_boundaries %>% osmdata::unname_osmdata_sf() ->
+  sf_unnamed_taipei
+sf_tpe_worship %>% osmdata::unname_osmdata_sf() ->
+  sf_unnamed_worship
+```
+
+```{r}
+plot_ly() %>% add_sf(
+    data = sf_unnamed_taipei$osm_multipolygons,
+    stroke = I("white"),
+    hoverinfo = "none"
+  ) %>% add_sf(
+    data = sf_unnamed_worship$osm_points,
+    marker = list(
+      size = 2),
+    hoverinfo = "text",
+    text = ~name,
+    color = I("gray"),
+    stroke = I("black"),
+    strokewid
+  )
+```
+
+```{r}
+plotly::plot_ly()
+```
+
+\#\#practice_蘭嶼 \#\#\#bb
+
+```{r}
+osmdata::getbb("Orchid Island (10730513)") -> bbLanyu
+bbLanyu
+```
+
+\#\#\#opq
+
+```{r}
+bbLanyu %>% opq() -> opqLanyu
+```
+
+\#\#\#feature
+
+```{r}
+opqLanyu %>% add_osm_feature(
+  key = "place",
+  value = "island"
+)->opqLanyu_place
+opqLanyu_place
+
+opqLanyu %>% add_osm_feature(
+  key = "admin_level",
+  value = "9"
+)->opqLanyu_village
+opqLanyu_village
+```
+
+\#\#\#sf
+
+```{r}
+opqLanyu_place %>% osmdata::osmdata_sf() -> sf_opqLanyu_place
+sf_opqLanyu_place %>% osmdata::unname_osmdata_sf() -> sf_opqLanyu_place
+
+opqLanyu_village %>% osmdata::osmdata_sf() -> sf_opqLanyu_village
+sf_opqLanyu_village %>% osmdata::unname_osmdata_sf() -> sf_opqLanyu_village
+```
+
+```{r}
+plot_ly() %>%
+  add_sf(
+    data = sf_opqLanyu_place$osm_multipolygons
+  ) %>%
+  add_sf(
+    data = sf_opqLanyu_village$osm_multipolygons,
+    stroke = I("gray"),
+    hoverinfo = "text",
+    text = ~name
+  )
+  
+```

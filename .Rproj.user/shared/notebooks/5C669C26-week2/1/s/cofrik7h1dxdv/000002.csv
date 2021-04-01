@@ -1,0 +1,32 @@
+"0","body(add_lines)
+"
+"1","{
+"
+"1","    if (inherit) {
+"
+"1","        x <- x %||% p$x$attrs[[1]][[""x""]]
+"
+"1","        y <- y %||% p$x$attrs[[1]][[""y""]]
+"
+"1","        z <- z %||% p$x$attrs[[1]][[""z""]]
+"
+"1","    }
+"
+"1","    if (is.null(x) || is.null(y)) {
+"
+"1","        stop(""Must supply `x` and `y` attributes"", call. = FALSE)
+"
+"1","    }
+"
+"1","    type <- if (!is.null(z)) 
+"
+"1","        ""scatter3d""
+"
+"1","    else ""scatter""
+"
+"1","    add_trace_classed(p, x = x, y = y, class = ""plotly_line"", 
+"
+"1","        type = type, mode = ""lines"", ..., data = data, inherit = inherit)
+"
+"1","}
+"

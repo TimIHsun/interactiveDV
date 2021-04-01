@@ -1,0 +1,4 @@
+"0","year(taylor_swift_lyrics$year)
+"
+"2","Error in as.POSIXlt.numeric(x, tz = tz(x)) : 'origin' must be supplied
+"

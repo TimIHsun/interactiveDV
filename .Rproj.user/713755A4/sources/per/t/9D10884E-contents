@@ -1,0 +1,80 @@
+---
+title: "Untitled"
+author: "邱奕勳"
+date: "3/31/2021"
+output: html_document
+---
+
+```{r}
+library(htmltools)
+```
+#html
+
+##1
+```{r}
+tags$html(
+  tags$head(
+    tags$title("this is title")
+  ),
+  tags$body(
+    tags$p("this is paragraph")
+  )
+)-> htmltags
+
+
+```
+
+```{r}
+save_html(htmltags, file = "hello.html")
+```
+
+##element-wise coding
+```{r}
+titletag <- tags$title("this is title")
+
+ptag <- tags$p("this is paragraph")
+
+h1tag <- tags$h1("this is tag1")
+
+allbody <- tagList(ptag, h1tag) #siblings
+```
+
+```{r}
+tags$html(
+  tags$head(titletag),
+  tags$body(allbody)
+)
+```
+
+#drake
+
+```{r}
+##藍圖
+drake_html <-
+drake::drake_plan(
+  titletag = tags$title("this is title"),
+  ptag = tags$p("this is paragraph"),
+  h1tag = tags$h1("this is h1"),
+  allbody = tagList(ptag, h1tag),
+  myHtml = tags$html(
+    tags$head(titletag),
+    tags$body(allbody)
+  )
+)
+
+##執行
+
+drake::make(drake_html) #儲存在背景 不會顯示出來，需要被呼喚
+
+##呼喚target
+drake::loadd(myHtml)
+
+##存成html
+save_html(myHtml, file = "hellofrom Drake.html")
+
+##visualize component dependency
+drake::vis_drake_graph(drake_html)
+```
+
+
+

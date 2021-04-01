@@ -1,0 +1,16 @@
+"0","# produces red bars with black outline"
+"0","plot_ly("
+"0","  diamonds,  #formula mapping 的概念與直接取值不同"
+"0","  x = ~cut, #直接map到diamonds，所以就不用specify data"
+"0","  color = I(""red""), "
+"0","  stroke = I(""black""), "
+"0","  span = I(2)"
+"0",")"
+"2","No trace type specified:
+  Based on info supplied, a 'histogram' trace seems appropriate.
+  Read more about this trace type -> https://plotly.com/r/reference/#histogram
+"
+"2","No trace type specified:
+  Based on info supplied, a 'histogram' trace seems appropriate.
+  Read more about this trace type -> https://plotly.com/r/reference/#histogram
+"

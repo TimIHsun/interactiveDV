@@ -1,0 +1,189 @@
+---
+title: "互動式經濟資料視覺化"
+output: output_format
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(plotly)
+# Paste your drake Rdata loading here
+xfun::download_file("https://www.dropbox.com/s/z2oz163w3jae05m/scattered_foundations_drake.Rdata?dl=1", mode="wb")
+load("scattered_foundations_drake.Rdata")
+```
+
+
+```{r}
+.root <- rprojroot::is_rstudio_project$make_fix_file()
+drake$.updateCache()
+drake$source_plan()
+drake$makePlan()
+```
+
+load target
+```{r}
+drake$loadTarget$pltWithoutI()
+pltWithoutI
+```
+
+see original code
+```{r}
+drake$clipCommand$pltWithoutI() # store in your clipboard after running this command
+```
+
+paste in the place you want to see the code
+
+
+#scattered foundation
+```{r}
+library(lubridate)
+econ <- economics %>%
+  mutate(yr = year(date), mnth = month(date))
+```
+
+##package內建資料
+```{r}
+##usethis::use_data(economics, internal=T)
+##to create internal data
+```
+
+##ggplot
+```{r}
+econ %>%
+  group_by(yr) %>%
+  ggplot(
+    aes(x=mnth, y=uempmed)
+  ) +
+  geom_line()
+```
+
+```{r}
+# One trace (more performant, but less interactive)
+econ %>%
+  group_by(yr) %>%
+  ggplot(
+    aes(x=mnth, y=uempmed)
+  ) +
+  geom_line(aes(group = yr, color = factor(yr))) # group/factor
+
+```
+
+```{r}
+plot_ly(econ, x = ~mnth, y = ~uempmed) %>%
+  add_lines(split = ~yr)
+
+```
+
+
+##plotly
+```{r}
+econ %>%
+ plot_ly(x = ~mnth, y = ~uempmed) %>%
+  add_lines(split = ~yr)
+```
+
+###查看函數內容
+```{r}
+body(add_lines)
+##最終還是使用add_trace
+```
+
+###Form->data (traces)
+```{r}
+drake$loadTarget$plt_multTraces()
+plt_multTraces
+plotly::plotly_json(plt_multTraces)
+```
+
+```{r}
+plot_ly(econ, x = ~mnth, y = ~uempmed) %>%
+  add_lines(
+    color = ~ordered(yr)) -> plotly_yr
+
+plotly_yr %>% plotly_json()
+
+plot_ly(econ, x = ~mnth, y = ~uempmed) %>%
+  add_lines(
+    color = ~ordered(yr),
+    visible = "legendonly",
+    hoverinfo = "text",
+    text = ~c(paste0("民國", I(yr-1911))),
+    textposition = "top left"
+    )
+```
+
+
+步驟
+*basic plotly draw
+*go to plotly::plotly_json 裡面的data content #了解什麼json attri可以更動
+*go to R figure reference https://plotly.com/r/reference/scatter/
+
+
+```{r}
+jsonlite::fromJSON("https://www.dropbox.com/s/q7h63r8p497q7xz/df_gdp_unemployment4label.json?dl=1") -> df_gdp_unemployment4label
+jsonlite::fromJSON("https://www.dropbox.com/s/dukzr6w2wj5vzfv/df_gdp_unemployment4plt.json?dl=1") -> df_gdp_unemployment4plt
+```
+
+```{r}
+
+df_gdp_unemployment4label %>%
+  mutate(time = ymd(time)) ->df_gdp_unemployment4label
+
+paste0(year(df_gdp_unemployment4label$time),"/",month(df_gdp_unemployment4label$time)) -> df_gdp_unemployment4label$text
+
+```
+
+
+```{r}
+df_gdp_unemployment4label %>% 
+  plot_ly(x = ~urate, y = ~growthRate) %>%
+  add_paths( 
+    text = ~text
+    )
+```
+
+
+```{r}
+plot_ly() %>%
+ add_trace(
+   type = "scatter",
+   mode = "markers+lines+text",
+   x = 4:6, 
+   y = 4:6,
+   text = replicate(3, praise::praise("You are ${adjective}! 🙌")),
+   textposition = "right",
+   hoverinfo = "text",
+   textfont = list(family = "Roboto Condensed", size = 16)
+ ) %>%
+ layout(xaxis = list(range = c(3, 8)))
+```
+
+```{r}
+plot_ly(mpg, x = ~cty, y = ~hwy) %>% 
+    add_markers(alpha = 0.2, name = "alpha") 
+#點重疊 所以設定alpha小於1
+#name = "alpha" 因為是單圖所以未呈現
+```
+
+```{r}
+plot_ly(mpg, x = ~cty, y = ~hwy) %>% 
+    add_markers(alpha = 0.2)
+```
+
+```{r}
+subplot(
+  plot_ly(mpg, x = ~cty, y = ~hwy, name = "default"),
+  plot_ly(mpg, x = ~cty, y = ~hwy) %>% 
+    add_markers(alpha = 0.2, name = "alpha")
+)
+```
+
+練習
+1. hover文字排版
+ex 民國... 經濟成長為... 失業率為...
+
+2. 畫一張圖

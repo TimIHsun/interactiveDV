@@ -1,0 +1,14 @@
+"0",".root <- rprojroot::is_rstudio_project$make_fix_file()"
+"0","drake$.updateCache() #更換暫存區位置"
+"2","drake cache is set to /Users/tim/Documents/GitHub/interactiveDV/.temp.
+If you want other folder than ""/.temp"", reload the drake Rdata and run 
+drake$.updateCache(newCache=""your_cache_folder_name"")
+"
+"0","drake$source_plan()"
+"0","drake$makePlan()"
+"2","Do not run make() from a subdirectory of your project.
+  running make() from: /Users/tim/Documents/GitHub/interactiveDV/rmd
+  drake project root:  /Users/tim/Documents/GitHub/interactiveDV
+  cache directory:     /Users/tim/Documents/GitHub/interactiveDV/.temp"
+"2","[32m✓[39m All targets are already up to date.
+"

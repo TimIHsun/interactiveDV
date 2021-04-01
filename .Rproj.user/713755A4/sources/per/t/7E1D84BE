@@ -1,0 +1,28 @@
+{
+    "id": "7E1D84BE",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1617251106050.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "id": "ba4d7c4aafc846998106fa5af7195151",
+        "name": "drake",
+        "title": "drake",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 140280766213944,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1617251106050,
+    "read_only": false,
+    "read_only_alternatives": []
+}

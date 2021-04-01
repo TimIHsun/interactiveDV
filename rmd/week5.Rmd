@@ -1,0 +1,88 @@
+---
+title: "互動式經濟資料視覺化"
+output: output_format
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(osmdata)
+library(ggmap)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(rgdal)
+# Paste your drake Rdata loading here
+xfun::download_file("https://www.dropbox.com/s/zwlewu5enjlkrgy/maps_drake.Rdata?dl=1", mode="wb")
+load("maps_drake.Rdata")
+load("overview_drake.Rdata")
+```
+
+
+```{r}
+.root <- rprojroot::is_rstudio_project$make_fix_file()
+drake$.updateCache()
+drake$source_plan()
+drake$makePlan()
+```
+
+
+##google map
+
+###底圖
+24.9438459,121.3686133,17z (經緯、zone in 倍數)
+
+
+
+
+```{r}
+c(left=121.3563238, bottom=24.9445791, right=121.3563614, top=24.9464552) -> bbox_sanxiaYingge2
+
+get_map(bbox_sanxiaYingge2, source="google") ->map_sanxiaYingge2
+
+c(left = 121.3654, bottom = 24.9452, right = 121.3906, top = 24.9544) -> bbox_sanxiaYingge2
+
+get_map(bbox_sanxiaYingge2)
+
+get_map(
+  c(left = 121.3563238, bottom = 24.9445791, right = 121.3563614, top = 24.9464552)
+  )
+
+
+```
+
+
+```{r}
+get_stamenmap
+```
+
+
+```{r}
+```
+
+
+```{r}
+c(left = 121.3, bottom = 24.7, right = 122, top = 25.3) -> newTaipeiBBox2
+
+get_map(newTaipeiBBox2) -> raster_newTaipei
+ggmap(raster_newTaipei)
+```
+
+
+```{r}
+ggmap(raster_newTaipei, extent = "devic")
+```
+
+```{r}
+xfun::download_file("https://www.dropbox.com/s/miuy2icrqjlozwk/20-Mar-2021-sanxiaBikeRoute.gpx?dl=1", mode="wb")
+plotKML::readGPX("20-Mar-2021-sanxiaBikeRoute.gpx") -> gpx_bikeRoute
+df_bikeRoute <- gpx_bikeRoute[["tracks"]][[1]][[1]]
+```
+
+
+```{r}
+remotes::install_github("tpemartin/rmd2drake", force = T)
+```
+
